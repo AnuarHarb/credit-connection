@@ -1,0 +1,36 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="credit-connection">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+  </template>
+
+  <script>
+    /**
+     * `credit-connection`
+     * Connection for the credit ui component and the backend logic.
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class CreditConnection extends Polymer.Element {
+      static get is() { return 'credit-connection'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'credit-connection'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(CreditConnection.is, CreditConnection);
+  </script>
+</dom-module>
