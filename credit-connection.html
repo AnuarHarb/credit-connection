@@ -11,9 +11,10 @@
 
     <h1>[[body.name]]</h1>
     <iron-ajax id="creditAjax"
-      url={{api}}
-      params={{params}}
-      body='{{body}}'
+      url="{{api}}"
+      method="[[method]]"
+      params="{{params}}"
+      body="{{body}}"
       handle-as="json"
       on-response="_handleResponse"
         lastError="_handleError"
@@ -43,6 +44,10 @@
             params: {
               type: Object,
               value: {}
+            },
+            method: {
+              type: String,
+              value: 'POST'
             },
             body: {
               type: Object,
