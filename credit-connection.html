@@ -81,7 +81,7 @@
         _handleResponse(e) {
           let resp = e.detail.response;
           console.log('status', e.detail.status);
-          if (resp.status === 'approved') {
+          if (resp.succes === true) {
             console.log('approved');
             this.dispatchEvent(new CustomEvent('credit-approved', {
               bubbles: true,
