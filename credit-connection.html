@@ -70,17 +70,11 @@
                     };
                 }
 
-                ready() {
-                    super.ready();
-                    this.set('request', JSON.stringify(this.body));
-                    this.generateRequest();
-                }
-
-
                 generateRequest() {
                     if (this.api === "") {
                         this._creditAvailabilityCheck();
                     } else {
+                        this.set('request', JSON.stringify(this.body));
                         this.$.creditAjax.generateRequest();
                     }
                 }
