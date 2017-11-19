@@ -107,6 +107,7 @@
         }
 
         _creditAvailabilityCheck() {
+            debugger;
           let monthlyPayWithInterest = this._getCreditWithInterest();
           let incomePayLimit = this._getIncomePayLimit();
           if (incomePayLimit > monthlyPayWithInterest) {
