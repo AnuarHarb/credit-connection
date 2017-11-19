@@ -2,7 +2,7 @@
   "name": "credit-connection",
   "description": "Connection for the credit ui component and the backend logic.",
   "main": "credit-connection.html",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "iron-ajax": "PolymerElements/iron-ajax#2.0.5"
