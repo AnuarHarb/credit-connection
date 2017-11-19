@@ -23,8 +23,8 @@
       <demo-snippet>
         <template>
           <credit-connection
-            body='{"name": "anuar", "lastName": "Harb", "creditAmount": "100000", "monthlyIncome": "20000", "timeToPay":"2"}'
-            api="https://chewiekies.firebaseio.com/data.json"
+            params='{"name": "anuar", "lastName": "Harb", "creditAmount": "1000", "monthlyIncome": "10000", "timeToPay":"20"}'
+            api="https://teloprestopapu.herokuapp.com/api/calculate"
             config='{"interest": ".38", "salaryPayLimit":".3"}'>
           </credit-connection>
         </template>
@@ -36,7 +36,7 @@
     <script>
       function changeBody() {
         document.querySelector('credit-connection').setAttribute('body', '{"name": "Joel", "lastName": "Harb", "creditAmount": "10000"}');
-        console.log('pum')
+        console.log('pum');
       }
     </script>
   </body>
