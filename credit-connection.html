@@ -11,93 +11,122 @@
 
     <h1>[[body.name]]</h1>
     <iron-ajax id="creditAjax"
-      auto
-      url="https://chewiekies.firebaseio.com/data.json"
-      params='{}'
+      url={{api}}
+      params={{params}}
       body='{{body}}'
       handle-as="json"
       on-response="_handleResponse"
+        lastError="_handleError"
       debounce-duration="300">
     </iron-ajax>
   </template>
 
   <script>
-    /**
-     * `credit-connection`
-     * Connection for the credit ui component and the backend logic.
-     *
-     * @customElement
-     * @polymer
-     * @demo demo/index.html
-     */
-    class CreditConnection extends Polymer.Element {
-      static get is() { return 'credit-connection'; }
-      static get properties() {
-        return {
-          body: {
-            type: Object,
-            value: {
-              firstName: 'anuar',
-              lastName: 'Harb',
-              creditType: 'personal',
-              monthlyIncome: '20000',
-              creditAmount: '10000',
-              timeToPay: 6,
+    (function(customElements) {
+      'use strict';
+      /**
+       * `credit-connection`
+       * Connection for the credit ui component and the backend logic.
+       *
+       * @customElement
+       * @polymer
+       * @demo demo/index.html
+       */
+      class CreditConnection extends Polymer.Element {
+        static get is() { return 'credit-connection'; }
+        static get properties() {
+          return {
+            api: {
+              type: String,
+              value: ""
             },
-            observer: '_bodyChange()'
-          },
-          config: {
-            type: Object,
-            value: {
-              interest: .04,
-              salaryLimit: .03
+            params: {
+              type: Object,
+              value: {}
+            },
+            body: {
+              type: Object,
+              value: {
+                firstName: 'anuar',
+                lastName: 'Harb',
+                creditType: 'personal',
+                monthlyIncome: '20000',
+                creditAmount: '10000',
+                timeToPay: 6
+              },
+            },
+            config: {
+              type: Object,
+              value: {
+                interest: .04,
+                salaryPayLimit: .03
+              }
             }
-          }
-        };
-      }
+          };
+        }
 
-      _handleResponse(e) {
-        let resp = e.detail.response
-        console.log('status', e.detail.status)
-        if (e.detail.status == 200) {
+        generateRequest() {
+          if (this.api == "") {
+            this._creditAvailabilityCheck();
+          } else {
+            this.$.creditAjax.generateRequest();
+          }
+        }
+
+        _handleResponse(e) {
+          let resp = e.detail.response;
+          console.log('status', e.detail.status);
           if (resp.status === 'approved') {
-            console.log('approved')
+            console.log('approved');
             this.dispatchEvent(new CustomEvent('credit-approved', {
               bubbles: true,
               composed: true,
               detail: resp
             }));
           } else {
-            console.log('not approved')
+            console.log('not approved');
             this.dispatchEvent(new CustomEvent('credit-denegate', {
               bubbles: true,
               composed: true,
               detail: resp
             }));
           }
-        } else {
-          console.log('error in response')
+        }
+
+        _handleError() {
           this.dispatchEvent(new CustomEvent('error-request', {
             bubbles: true,
             composed: true,
             detail: e.detail.status
           }));
         }
+
+        _creditAvailabilityCheck() {
+          let monthlyPayWithInterest = this._getCreditWithInterest();
+          let incomePayLimit = this._getIncomePayLimit();
+          if (incomePayLimit > monthlyPayWithInterest) {
+            let status = 'approved';
+            console.log('status', status);
+          } else {
+            let status = 'fail';
+            console.log('status', status);
+          }
+        }
+        _getCreditWithInterest() {
+          let creditWithInterest = this.body.creditAmount * (Number(this.config.interest) + 1);
+          let monthlyPayWithInterest = this._getMonthlyPayWithInterest(creditWithInterest);
+          return monthlyPayWithInterest;
+        }
+        _getMonthlyPayWithInterest(creditWithInterest) {
+          let monthlyPayWithInterest = creditWithInterest / this.body.timeToPay;
+          return monthlyPayWithInterest;
+        }
+        _getIncomePayLimit() {
+          let incomePayLimit = this.body.monthlyIncome * this.config.salaryPayLimit;
+          return incomePayLimit;
+        }
       }
-
-      _bodyChange() {
-        // let creditWithInterest = this.body.creditAmount * (this.config.interest + 1)
-        // let monthlyPayWithInterest = creditWithInterest / this.body.timeToPay
-        // let incomePayLimit = this.body.monthlyIncome * this.config.salaryPayLimit
-        // console.log('Credito', this.body.creditAmount)
-        // console.log('Credito + Intereses', creditWithInterest)
-        // console.log('Pago menusal', monthlyPayWithInterest)
-        // console.log('Pago limite con el sueldo', incomePayLimit)
-        this.$.creditAjax.generateRequest()
-      }
-    }
-
-
-    window.customElements.define(CreditConnection.is, CreditConnection);
+      customElements.define(CreditConnection.is, CreditConnection);
+    })(window.customElements);
   </script>
 </dom-module>
