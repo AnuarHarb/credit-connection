@@ -79,8 +79,8 @@
                     }
                 }
 
-                _handleResponse(e) {
-                    let resp = e.detail.response;
+                _handleResponse(event) {
+                    let resp = event.detail.response;
                     if (resp.success === true) {
                         this.dispatchEvent(new CustomEvent('credit-approved', {
                             bubbles: true,
