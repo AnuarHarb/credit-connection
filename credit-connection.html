@@ -9,11 +9,12 @@
             }
         </style>
         <iron-ajax id="creditAjax"
-                   url="{{api}}"
+                   url="[[api]]"
                    method="[[method]]"
-                   params="[[params]]"
-                   body="[[body]]"
+                   params="[[request]]"
+                   body="[[request]]"
                    handle-as="json"
+                   content-type="application/json"
                    on-response="_handleResponse"
                    lastError="_handleError"
                    debounce-duration="300">
@@ -45,7 +46,7 @@
                         },
                         params: {
                             type: Object,
-                            value: {}
+                            value: {},
                         },
                         method: {
                             type: String,
@@ -53,14 +54,7 @@
                         },
                         body: {
                             type: Object,
-                            value: {
-                                firstName: 'anuar',
-                                lastName: 'Harb',
-                                creditType: 'personal',
-                                monthlyIncome: '1000',
-                                creditAmount: '10000',
-                                timeToPay: 20
-                            },
+                            value: {},
                         },
                         config: {
                             type: Object,
@@ -68,12 +62,17 @@
                                 interest: .04,
                                 salaryPayLimit: .03
                             }
+                        },
+                        request: {
+                            type: String,
+                            value: ''
                         }
                     };
                 }
 
-                connectedCallback() {
-                    super.connectedCallback();
+                ready() {
+                    super.ready();
+                    this.set('request', JSON.stringify(this.body));
                     this.generateRequest();
                 }
 
@@ -82,10 +81,6 @@
                     if (this.api === "") {
                         this._creditAvailabilityCheck();
                     } else {
-                        this.set('params', JSON.stringify(this.body));
-                        console.log(this.body);
-                        this.set('body', JSON.stringify(this.body));
-                        console.log(this.body);
                         this.$.creditAjax.generateRequest();
                     }
                 }
@@ -119,14 +114,12 @@
                     let monthlyPayWithInterest = this._getCreditWithInterest();
                     let incomePayLimit = this._getIncomePayLimit();
                     if (incomePayLimit > monthlyPayWithInterest) {
-                        let status = 'approved';
                         this.dispatchEvent(new CustomEvent('credit-approved', {
                             bubbles: true,
                             composed: true,
                             detail: resp
                         }));
                     } else {
-                        let status = 'fail';
                         this.dispatchEvent(new CustomEvent('credit-denegate', {
                             bubbles: true,
                             composed: true,
