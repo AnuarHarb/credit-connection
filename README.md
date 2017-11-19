@@ -1,6 +1,6 @@
 # \<credit-connection\>
 
-Connection for the credit ui component and the backend logic.
+Connection for the credit ui component and the backend API.
 
 ## Install the Polymer-CLI
 
@@ -19,3 +19,13 @@ $ polymer test
 ```
 
 Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+
+## Properties
+  body: 
+
+
+## Protected methods
+
+_handleResponse(e)
+
+_bodyChange()

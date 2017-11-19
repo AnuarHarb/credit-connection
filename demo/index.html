@@ -22,9 +22,21 @@
       <h3>Basic credit-connection demo</h3>
       <demo-snippet>
         <template>
-          <credit-connection></credit-connection>
+          <credit-connection
+            body='{"name": "anuar", "lastName": "Harb", "creditAmount": "10000", "monthlyIncome": "20000"}'
+            config='{"interest": ".4", "salaryLimit":".3"}'
+            ></credit-connection>
         </template>
       </demo-snippet>
+
+      <button onclick="changeBody()">change</button>
     </div>
+
+    <script>
+      function changeBody() {
+        document.querySelector('credit-connection').setAttribute('body', '{"name": "Joel", "lastName": "Harb", "creditAmount": "10000"}');
+        console.log('pum')
+      }
+    </script>
   </body>
 </html>
